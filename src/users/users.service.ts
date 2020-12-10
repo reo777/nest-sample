@@ -28,16 +28,27 @@ export class UsersService {
   }
   async findAll() {
     // userModelにアクセスすることで、DBの値を取得できるようにする
+    // exec()をつけることでPromiseが返ってくる
     return await this.userModel.find().exec();
   }
 
   async findOne(username: string) {
     // 存在しないデータはnullになる
-    const user = await this.userModel.findOne({ username });
+    const user = await this.userModel.findOne({ username }).exec();
     if (!user) {
       throw new NotFoundException('存在しないユーザーです');
     }
 
+    return user;
+  }
+
+  async updateName(targetUserName: string, nextUserName: string) {
+    const user = await this.userModel.findOne({ targetUserName }).exec();
+    if (!user) {
+      throw new NotFoundException('存在しないユーザーです');
+    }
+    user.username = nextUserName;
+    user.save();
     return user;
   }
 }

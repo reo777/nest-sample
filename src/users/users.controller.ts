@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateUserDTO } from './dto/createuser.dto';
@@ -28,5 +29,10 @@ export class UsersController {
   @Post()
   create(@Body(ValidationPipe) createUser: CreateUserDTO) {
     return this.usersService.create(createUser);
+  }
+
+  @Put(':username')
+  updateName(@Param('username') targetUserName: string, nextUserName: string) {
+    return this.usersService.updateName(targetUserName, nextUserName);
   }
 }
