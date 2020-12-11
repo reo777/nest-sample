@@ -5,8 +5,11 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   ValidationPipe,
+  Request,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDTO } from './dto/createuser.dto';
 import { UsersService } from './users.service';
 
@@ -22,7 +25,15 @@ export class UsersController {
   }
   // クエリ
   @Get(':username')
-  findOne(@Param('username') username: string) {
+
+  // @nest/passportはjwt以外のストラテジーがあるので、明示的にjwtにする
+  // jwtの解析は@nestjs/passportがやってくれる
+  // 認証後のユーザーのみfindOneを叩けるようにjwtの解析を行う
+  @UseGuards(AuthGuard('jwt'))
+  findOne(@Param('username') username: string, @Request() req: any) {
+    // ここのuserはjwt.strategyでreturnされているpayload
+    console.log(req.user);
+
     return this.usersService.findOne(username);
   }
 
