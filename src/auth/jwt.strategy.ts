@@ -19,7 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   // jwtを複合化した時にできるpayload
   async validate(payload: JWTPayload) {
     // UseGuard
-    // @UseGuardsの@Requestを使ってデータのアクセスを行っているところにpayloadが返される
+    // @UseGuardsの@Requestを使ってデータのアクセスを行っているところにpayloadが　返される
     return payload;
   }
 }
